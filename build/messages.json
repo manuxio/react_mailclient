@@ -1,0 +1,90 @@
+{
+  "enablecompose": true,
+  "total": 1,
+  "attachments": [
+
+  ],
+  "messages": [
+    {
+      "id": 100123123,
+      "direction": "in",
+      "read": false,
+      "from": "manu@cappelleri.net",
+      "to": "c100p10123123@s97.srl",
+      "subject": "Buongiorno alla Serfin",
+      "date": "2017-10-10 08:30:00"
+    },
+    {
+      "id": 100123124,
+      "direction": "in",
+      "read": false,
+      "from": "manu@cappelleri.net",
+      "to": "c100p10123123@s97.srl",
+      "subject": "Buongiorno alla Serfin",
+      "date": "2017-10-10 08:30:00"
+    },
+    {
+      "id": 100123123,
+      "direction": "out",
+      "read": false,
+      "from": "manu@cappelleri.net",
+      "to": "c100p10123123@s97.srl",
+      "subject": "Buongiorno alla Serfin",
+      "date": "2017-10-10 08:30:00"
+    },
+    {
+      "id": 1010123123,
+      "direction": "in",
+      "read": false,
+      "from": "manu@cappelleri.net",
+      "to": "c100p10123123@s97.srl",
+      "subject": "Buongiorno alla Serfin",
+      "date": "2017-10-10 08:30:00"
+    },
+    {
+      "id": 1001123124,
+      "direction": "in",
+      "read": false,
+      "from": "manu@cappelleri.net",
+      "to": "c100p10123123@s97.srl",
+      "subject": "Buongiorno alla Serfin",
+      "date": "2017-10-10 08:30:00"
+    },
+    {
+      "id": 1001123123,
+      "direction": "out",
+      "read": false,
+      "from": "manu@cappelleri.net",
+      "to": "c100p10123123@s97.srl",
+      "subject": "Buongiorno alla Serfin",
+      "date": "2017-10-10 08:30:00"
+    },
+    {
+      "id": 10120123123,
+      "direction": "in",
+      "read": false,
+      "from": "manu@cappelleri.net",
+      "to": "c100p10123123@s97.srl",
+      "subject": "Buongiorno alla Serfin",
+      "date": "2017-10-10 08:30:00"
+    },
+    {
+      "id": 10012223124,
+      "direction": "in",
+      "read": false,
+      "from": "manu@cappelleri.net",
+      "to": "c100p10123123@s97.srl",
+      "subject": "Buongiorno alla Serfin",
+      "date": "2017-10-10 08:30:00"
+    },
+    {
+      "id": 10012313323,
+      "direction": "out",
+      "read": false,
+      "from": "manu@cappelleri.net",
+      "to": "c100p10123123@s97.srl",
+      "subject": "Buongiorno alla Serfin",
+      "date": "2017-10-10 08:30:00"
+    }
+  ]
+}
