@@ -3,13 +3,14 @@ const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 
 const config = {
   devtool: 'cheap-module-source-map',
 
   entry: [
     './main.js',
-    './assets/scss/main.scss',
+    './assets/scss/main.scss'
   ],
 
   context: resolve(__dirname, 'app'),
@@ -17,7 +18,7 @@ const config = {
   output: {
     filename: 'bundle.js',
     path: resolve(__dirname, 'dist'),
-    publicPath: '',
+    publicPath: ''
   },
 
   plugins: [
@@ -25,19 +26,17 @@ const config = {
     new HtmlWebpackPlugin({
       template: `${__dirname}/app/index.html`,
       filename: 'index.html',
-      inject: 'body',
+      inject: 'body'
     }),
     new webpack.optimize.OccurrenceOrderPlugin(),
     new webpack.LoaderOptionsPlugin({
       minimize: true,
-      debug: false,
+      debug: false
     }),
-    new webpack.optimize.UglifyJsPlugin({
-      beautify: false
-    }),
+    new UglifyJSPlugin(),
     new webpack.DefinePlugin({ 'process.env': { NODE_ENV: JSON.stringify('production') } }),
     new ExtractTextPlugin({ filename: './styles/style.css', disable: false, allChunks: true }),
-    new CopyWebpackPlugin([{ from: './vendors', to: 'vendors' }]),
+    new CopyWebpackPlugin([{ from: './vendors', to: 'vendors' }])
   ],
 
   module: {
@@ -45,19 +44,29 @@ const config = {
       {
         test: /\.js?$/,
         exclude: /node_modules/,
-        loader: 'babel-loader',
+        loader: 'babel-loader'
+      },
+      {
+        test: /\.css$/,
+        // exclude: /node_modules/,
+        use: ExtractTextPlugin.extract({
+          fallback: 'style-loader',
+          use: [
+            'css-loader'
+          ]
+        })
       },
       {
         test: /\.scss$/,
-        exclude: /node_modules/,
+        // exclude: /node_modules/,
         use: ExtractTextPlugin.extract({
           fallback: 'style-loader',
           use: [
             'css-loader',
-            { loader: 'sass-loader', query: { sourceMap: false } },
+            { loader: 'sass-loader', query: { sourceMap: false } }
           ],
           publicPath: '../'
-        }),
+        })
       },
       {
         test: /\.(png|jpg|gif)$/,
@@ -67,10 +76,10 @@ const config = {
             options: {
               limit: 8192,
               mimetype: 'image/png',
-              name: 'images/[name].[ext]',
+              name: 'images/[name].[ext]'
             }
           }
-        ],
+        ]
       },
       {
         test: /\.eot(\?v=\d+.\d+.\d+)?$/,
@@ -81,7 +90,7 @@ const config = {
               name: 'fonts/[name].[ext]'
             }
           }
-        ],
+        ]
       },
       {
         test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
@@ -91,10 +100,10 @@ const config = {
             options: {
               limit: 8192,
               mimetype: 'application/font-woff',
-              name: 'fonts/[name].[ext]',
+              name: 'fonts/[name].[ext]'
             }
           }
-        ],
+        ]
       },
       {
         test: /\.[ot]tf(\?v=\d+.\d+.\d+)?$/,
@@ -104,10 +113,10 @@ const config = {
             options: {
               limit: 8192,
               mimetype: 'application/octet-stream',
-              name: 'fonts/[name].[ext]',
+              name: 'fonts/[name].[ext]'
             }
           }
-        ],
+        ]
       },
       {
         test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
@@ -117,13 +126,13 @@ const config = {
             options: {
               limit: 8192,
               mimetype: 'image/svg+xml',
-              name: 'images/[name].[ext]',
+              name: 'images/[name].[ext]'
             }
           }
-        ],
-      },
+        ]
+      }
     ]
-  },
+  }
 };
 
 module.exports = config;

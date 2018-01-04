@@ -34,7 +34,7 @@ export default class App extends React.Component {
     const myURL = urlParse(myPage, true);
     console.log(myURL);
     request
-      .get(`messages.json?idcontratto=${myURL.query.idcontratto}`)
+      .get(`../data/messages.php?idcontratto=${myURL.query.idcontratto}`)
       .end((err, res) => {
         if (err) {
           this.setState({
@@ -99,7 +99,13 @@ export default class App extends React.Component {
             from={this.state.newmsgfrom}
             to={this.state.newmsgto}
             subject={this.state.newmsgsubject}
-            attachments={[]}
+            attachments={[
+              {
+                filename: 'pippo',
+                id: 'pippo',
+                type: 'pluto'
+              }
+            ]}
             discard={() => {
               console.log('Discarding!');
               this.setState({

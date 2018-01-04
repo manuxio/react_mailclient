@@ -8,6 +8,7 @@ export default class EmailListItem extends React.Component {
     id: PropTypes.string.isRequired,
     subject: PropTypes.string.isRequired,
     from: PropTypes.string.isRequired,
+    fromAsHtml: PropTypes.string,
     onEmailClicked: PropTypes.func.isRequired,
     // direction: PropTypes.string.isRequired,
     direction: PropTypes.string.isRequired,
@@ -15,7 +16,8 @@ export default class EmailListItem extends React.Component {
   }
 
   static defaultProps = {
-    selected: false
+    selected: false,
+    fromAsHtml: null
   }
 
   render() {
@@ -28,7 +30,12 @@ export default class EmailListItem extends React.Component {
       <div tabIndex={0} role="button" onClick={() => { this.props.onEmailClicked(this.props.id, this.props.direction); }} className={classes}>
         <div className="email-item__subject truncate">{this.props.subject}</div>
         <div className="email-item__details">
-          <span className="email-item__from truncate">{this.props.from}</span>
+          <span
+            className="email-item__from truncate"
+            dangerouslySetInnerHTML={{ // eslint-disable-line
+              __html: this.props.fromAsHtml || this.props.from
+            }}
+          />
           <span className="email-item__time truncate">{moment(this.props.date).format('LLL')}</span>
         </div>
       </div>
