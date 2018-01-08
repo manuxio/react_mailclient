@@ -1,5 +1,5 @@
 const { resolve } = require('path');
-
+const path = require('path');
 const webpack = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
@@ -28,7 +28,21 @@ const config = {
     hot: true,
     host: '0.0.0.0',
     contentBase: resolve(__dirname, 'build'),
-    publicPath: '/'
+    publicPath: '/',
+    proxy: {
+      '/newsite/mailer/data/messages.php': {
+        target: 'http://10.161.9.26/newsite/mailer/data/messages.php',
+        secure: false
+      },
+      '/newsite/mailer/data/singlemessage.php': {
+        target: 'http://10.161.9.26/newsite/mailer/data/singlemessage.php',
+        secure: false
+      },
+      '/newsite/mailer/data/singleattachment.php': {
+        target: 'http://10.161.9.26/newsite/mailer/data/singleattachment.php',
+        secure: false
+      }
+    }
   },
 
   module: {
@@ -50,8 +64,51 @@ const config = {
         test: /\.css$/,
         use: ExtractTextPlugin.extract({
           use: [
-            'css-loader'
+            {
+              loader: 'css-loader',
+              options: {
+                modules: false,
+                camelCase: true,
+                localIdentName: '[path][name]__[local]--[hash:base64:5]'
+              }
+            }
           ]
+        }),
+        exclude: path.resolve(__dirname, "node_modules/")
+      },
+      {
+        test: /\.css$/,
+        use: ExtractTextPlugin.extract({
+          use: [
+            {
+              loader: 'css-loader'
+            }
+          ]
+        }),
+        include: path.resolve(__dirname, "node_modules/")
+      },
+      {
+        test: /\.less$/,
+        // exclude: /node_modules/,
+        use: ExtractTextPlugin.extract({
+          fallback: 'style-loader',
+          use: [
+            {
+              loader: 'css-loader',
+              options: {
+                modules: true,
+                camelCase: true,
+                localIdentName: '[path][name]__[local]--[hash:base64:5]'
+              }
+            },
+            {
+              loader: 'less-loader',
+              query: {
+                sourceMap: false
+              }
+            }
+          ],
+          publicPath: '../'
         })
       },
       {
@@ -60,7 +117,14 @@ const config = {
         use: ExtractTextPlugin.extract({
           fallback: 'style-loader',
           use: [
-            'css-loader',
+            {
+              loader: 'css-loader',
+              options: {
+                modules: true,
+                camelCase: true,
+                localIdentName: '[path][name]__[local]--[hash:base64:5]'
+              }
+            },
             {
               loader: 'sass-loader',
               query: {
@@ -69,7 +133,28 @@ const config = {
             }
           ],
           publicPath: '../'
-        })
+        }),
+        exclude: path.resolve(__dirname, "node_modules/")
+      },
+      {
+        test: /\.scss$/,
+        // exclude: /node_modules/,
+        use: ExtractTextPlugin.extract({
+          fallback: 'style-loader',
+          use: [
+            {
+              loader: 'css-loader'
+            },
+            {
+              loader: 'sass-loader',
+              query: {
+                sourceMap: false
+              }
+            }
+          ],
+          publicPath: '../'
+        }),
+        include: path.resolve(__dirname, "node_modules/")
       },
       {
         test: /\.(png|jpg|gif)$/,

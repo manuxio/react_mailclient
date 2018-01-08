@@ -1,9 +1,10 @@
 const { resolve } = require('path');
-const webpack = require('webpack');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const CopyWebpackPlugin = require('copy-webpack-plugin');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
-const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
+const path = require('path');
+const webpack = require('webpack'); // eslint-disable-line
+const HtmlWebpackPlugin = require('html-webpack-plugin'); // eslint-disable-line
+const CopyWebpackPlugin = require('copy-webpack-plugin'); // eslint-disable-line
+const ExtractTextPlugin = require('extract-text-webpack-plugin'); // eslint-disable-line
+const UglifyJSPlugin = require('uglifyjs-webpack-plugin'); // eslint-disable-line
 
 const config = {
   devtool: 'cheap-module-source-map',
@@ -52,7 +53,14 @@ const config = {
         use: ExtractTextPlugin.extract({
           fallback: 'style-loader',
           use: [
-            'css-loader'
+            {
+              loader: 'css-loader',
+              options: {
+                modules: true,
+                camelCase: true,
+                localIdentName: '[path][name]__[local]--[hash:base64:5]'
+              }
+            }
           ]
         })
       },
@@ -62,8 +70,60 @@ const config = {
         use: ExtractTextPlugin.extract({
           fallback: 'style-loader',
           use: [
-            'css-loader',
-            { loader: 'sass-loader', query: { sourceMap: false } }
+            {
+              loader: 'css-loader',
+              options: {
+                modules: true,
+                camelCase: true,
+                localIdentName: '[path][name]__[local]--[hash:base64:5]'
+              }
+            },
+            {
+              loader: 'sass-loader',
+              query: {
+                sourceMap: false
+              }
+            }
+          ],
+          publicPath: '../'
+        }),
+        exclude: path.resolve(__dirname, 'node_modules/')
+      },
+      {
+        test: /\.scss$/,
+        // exclude: /node_modules/,
+        use: ExtractTextPlugin.extract({
+          fallback: 'style-loader',
+          use: [
+            {
+              loader: 'css-loader'
+            },
+            {
+              loader: 'sass-loader',
+              query: {
+                sourceMap: false
+              }
+            }
+          ],
+          publicPath: '../'
+        }),
+        include: path.resolve(__dirname, 'node_modules/')
+      },
+      {
+        test: /\.less$/,
+        // exclude: /node_modules/,
+        use: ExtractTextPlugin.extract({
+          fallback: 'style-loader',
+          use: [
+            {
+              loader: 'css-loader',
+              options: {
+                modules: true,
+                camelCase: true,
+                localIdentName: '[path][name]__[local]--[hash:base64:5]'
+              }
+            },
+            { loader: 'less-loader', query: { sourceMap: false } }
           ],
           publicPath: '../'
         })

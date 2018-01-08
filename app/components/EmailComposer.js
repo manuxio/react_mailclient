@@ -7,13 +7,13 @@ import 'react-mde/lib/styles/scss/react-mde-all.scss';
 import {
   insertText
 } from 'react-mde/lib/js/helpers/ReactMdeTextHelper';
+import bootstrap from '../assets/less/bootstrap.less';
+import allStyle from './style.scss';
 
 const makeLinkCommand = {
   icon: 'link',
-  tooltip:
-  'Insert a link',
-  execute:
-  (text, selection) => {
+  tooltip: 'Insert a link',
+  execute: (text, selection) => {
     const { newText, insertionLength } = insertText(text, '[', selection.start);
     const finalText = insertText(newText, '](http://www.s97.srl)', selection.end + insertionLength).newText;
     return {
@@ -26,20 +26,17 @@ const makeLinkCommand = {
   }
 };
 
-export default class EmailMessage extends React.Component {
+export default class EmailComposer extends React.Component {
   static propTypes = {
     subject: PropTypes.string.isRequired,
     to: PropTypes.string.isRequired,
-    // from: PropTypes.string.isRequired,
+    from: PropTypes.string.isRequired,
     // to: PropTypes.string.isRequired,
-    // send: PropTypes.func.isRequired,
+    send: PropTypes.func.isRequired,
     discard: PropTypes.func.isRequired,
-    attachments: PropTypes.arrayOf(PropTypes.shape({
-      idcontratto: PropTypes.number,
-      filename: PropTypes.string,
-      type: PropTypes.string,
-      id: PropTypes.number
-    })).isRequired
+    attachments: PropTypes.arrayOf({
+      attachment_name: PropTypes.string
+    }).isRequired
   }
 
   static defaultProps = {
@@ -50,6 +47,7 @@ export default class EmailMessage extends React.Component {
     this.state = {
       subject: props.subject,
       message: '',
+      from: props.from,
       to: props.to,
       attachments: props.attachments
     };
@@ -57,23 +55,23 @@ export default class EmailMessage extends React.Component {
 
   render() {
     return (
-      <div className="email-composer">
-        <form className="">
-          <div className="form-group">
-            <div className="">
-              <div className="col-sm-3">
-                <label htmlFor="subject">Subject</label>
+      <div className={`${allStyle.emailComposer}`}>
+        <form>
+          <div className={`${bootstrap.formGroup}`}>
+            <div>
+              <div className={`${bootstrap.colXs3}`}>
+                <label htmlFor="to">To</label>
               </div>
-              <div className="col-sm-9">
-                <input type="text" style={{ borderRadius: '0px' }} id="subject" className="form-control" placeholder="Subject" value={this.state.subject} onChange={(e) => { this.setState({ subject: e.target.value }); }} />
+              <div className={`${bootstrap.colXs9}`}>
+                <input type="text" style={{ borderRadius: '0px' }} id="to" className={`${bootstrap.formControl}`} placeholder="To" value={this.state.to} onChange={(e) => { this.setState({ to: e.target.value }); }} />
               </div>
             </div>
             <div className="">
-              <div className="col-sm-3">
-                <label htmlFor="to">To</label>
+              <div className={`${bootstrap.colXs3}`}>
+                <label htmlFor="subject">Subject</label>
               </div>
-              <div className="col-sm-9">
-                <input type="text" style={{ borderRadius: '0px' }} id="to" className="form-control" placeholder="To" value={this.state.to} onChange={(e) => { this.setState({ to: e.target.value }); }} />
+              <div className={`${bootstrap.colXs9}`}>
+                <input type="text" style={{ borderRadius: '0px' }} id="subject" className={`${bootstrap.formControl}`} placeholder="Subject" value={this.state.subject} onChange={(e) => { this.setState({ subject: e.target.value }); }} />
               </div>
             </div>
             <ReactMde
@@ -92,7 +90,7 @@ export default class EmailMessage extends React.Component {
               }}
               commands={[
                 [
-                  ReactMdeCommands.makeHeaderCommand,
+                  // ReactMdeCommands.makeHeaderCommand,
                   ReactMdeCommands.makeBoldCommand,
                   ReactMdeCommands.makeItalicCommand,
                   makeLinkCommand,
@@ -104,33 +102,38 @@ export default class EmailMessage extends React.Component {
           </div>
         </form>
         <div className="">
-          <div className="col-sm-6">
+          <div className={`${bootstrap.colXs3}`}>
             <button
-              className="btn btn-sm btn-warning"
+              className={`${bootstrap.btn} ${bootstrap.btnSm} ${bootstrap.btnWarning}`}
               onClick={() => {
-                console.log('this.props.discard', this.props.discard);
+                // console.log('this.props.discard', this.props.discard);
+                this.state.attachments.forEach((att) => {
+                  att.checked = false; // eslint-disable-line
+                });
                 this.props.discard();
               }}
             >
               Cancel
             </button>
           </div>
-          <div className="col-sm-6 text-right">
-            <div className="btn-group dropup">
+          <div className={`${bootstrap.colXs9} ${bootstrap.textRight}`}>
+            <div
+              className={`${bootstrap.btnGroup} ${bootstrap.dropup}`}
+            >
               {
                 this.state.attachments.length > 0
                 ? (
                   <button
-                    className="btn btn-sm btn-primary"
+                    className={`${bootstrap.btn} ${bootstrap.btnSm} ${bootstrap.btnPrimary}`}
                     onClick={() => {
                       this.setState({
                         attachmentsOpen: !this.state.attachmentsOpen
-                      })
+                      });
                     }}
                   >
-                    Attachments
-                    &nbsp;
-                    <span className="caret" />
+                    Attachments ({ this.state.attachments.filter(att => att.checked).length })
+                    {' '}
+                    <span className={bootstrap.caret} />
                   </button>
                 )
                 : null
@@ -138,12 +141,29 @@ export default class EmailMessage extends React.Component {
               {
                 this.state.attachmentsOpen
                 ? (
-                  <ul className="dropdown-menu" style={{ display: 'block' }}>
+                  <ul className={bootstrap.dropdownMenu} style={{ display: 'block' }}>
                     {
-                      this.state.attachments.map((att) => {
+                      this.state.attachments.map((att, pos) => {
                         return (
-                          <li>&nbsp;<input type="checkbox" checked={att.checked} /><label htmlFor="option">Option</label></li>
-                        )
+                          <li>
+                            <input
+                              type="checkbox"
+                              id={att.attachment_name}
+                              checked={att.checked}
+                              style={{ marginLeft: '5px', marginRight: '5px', paddingTop: '3px' }}
+                              value="1"
+                              onChange={(e) => {
+                                this.state.attachments[pos].checked = e.target.checked;
+                                const { attachments } = this.state;
+                                attachments[pos].checked = e.target.checked;
+                                this.setState({
+                                  attachments
+                                });
+                              }}
+                            />
+                            <label htmlFor={att.attachment_name}>{att.attachment_name}</label>
+                          </li>
+                        );
                       })
                     }
                   </ul>
@@ -151,10 +171,17 @@ export default class EmailMessage extends React.Component {
                 : null
               }
               <button
-                className="btn btn-sm btn-success"
+                className={`${bootstrap.btn} ${bootstrap.btnSm} ${bootstrap.btnSuccess}`}
                 onClick={() => {
-                  console.log('this.props.discard', this.props.discard);
-                  this.props.discard()
+                  // console.log('this.props.discard', this.props.discard);
+                  // this.props.discard();
+                  this.props.send(
+                    this.state.from,
+                    this.state.to,
+                    this.state.subject,
+                    this.state.message && this.state.message.text ? this.state.message.text : '',
+                    this.state.attachments.filter(att => att.checked)
+                  );
                 }}
               >
                 Send
