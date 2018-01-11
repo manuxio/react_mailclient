@@ -75,7 +75,14 @@ export default class EmailListItem extends React.Component {
         />
       );
     }
-    const fromLocal = from.indexOf('@s97.srl') > -1;
+    const userRegexp = /^([a-z]*)([0-9]+)([-;_.*#+!:^,])([a-z]*)([0-9]+)$/;
+    const atSign = from.indexOf('@');
+    const user = from.substring(0, atSign);
+    const fromLocal = from.indexOf('@s97.srl') > -1
+      || from.indexOf('@serfin97.it') > -1
+      || from.indexOf('@esafactoring.it') > -1
+      || from.indexOf('@serfin97.it') > -1
+      || userRegexp.test(user);
     let fullFrom = null;
     if (fromLocal) {
       fullFrom = seendate
@@ -111,7 +118,7 @@ export default class EmailListItem extends React.Component {
         </div>
       );
     }
-    console.log('this.props.attachments', this.props.attachments);
+    // console.log('this.props.attachments', this.props.attachments);
     return (
       <div
         tabIndex="0"

@@ -44,14 +44,17 @@ export default class EmailList extends React.Component {
           >
             <ul className={`${bootstrap.nav} ${allStyle.navbarNav}`} style={{ float: 'right', margin: '0px 10px 0px 0px' }}>
               {
-                (window && window.parent && window.parent.contratto) ?
+                (
+                  window
+                  && window.parent
+                  && window.parent.contratto
+                  && window.parent.contratto.mailbox
+                ) ?
                 (
                   <li className={`${bootstrap.textRight}`} style={{ float: 'left' }}>
-                    <CopyToClipboard text={`c${window.parent.contratto.CodiceCliente}.p${window.parent.contratto.idcontratto}@s97.srl`}>
+                    <CopyToClipboard text={`${window.parent.contratto.mailbox.address}`}>
                       <div className={`${bootstrap.btn}`}>
-                        c{ window.parent.contratto.CodiceCliente }
-                        .p{ window.parent.contratto.idcontratto }
-                        @s97.srl
+                        {window.parent.contratto.mailbox.address}
                       </div>
                     </CopyToClipboard>
                   </li>
@@ -59,7 +62,15 @@ export default class EmailList extends React.Component {
                 : null
               }
               {
-                (this.props.compose && (window && window.parent && window.parent.contratto)) ?
+                (this.props.compose
+                  && (
+                    window
+                    && window.parent
+                    && window.parent.contratto
+                    && window.parent.contratto.mailbox
+                    && window.parent.contratto.mailbox.cansend
+                  )
+                ) ?
                 (
                   <li className={`${bootstrap.textRight}`} style={{ float: 'left' }}>
                     <div

@@ -96,12 +96,28 @@ export default class EmailMessage extends React.Component {
               role="button"
               tabIndex={-1}
               onClick={() => {
-                if (email.from && email.from.indexOf('@s97.srl') > -1) {
+                const userRegexp = /^([a-z]*)([0-9]+)([-;_.*#+!:^,])([a-z]*)([0-9]+)$/;
+                const atSign = email.from.indexOf('@');
+                const user = email.from.substring(0, atSign);
+                const fromLocal = email.from.indexOf('@s97.srl') > -1
+                  || email.from.indexOf('@serfin97.it') > -1
+                  || email.indexOf('@esafactoring.it') > -1
+                  || email.from.indexOf('@serfin97.it') > -1
+                  || userRegexp.test(user);
+                if (fromLocal) {
                   // console.log('There!');
-                  this.props.sendReply(email.to, `c${window.parent.contratto.CodiceCliente}.p${window.parent.contratto.idcontratto}@s97.srl`, email.subject);
+                  this.props.sendReply(
+                    email.to,
+                    window.parent.contratto.mailbox.address,
+                    email.subject
+                  );
                 } else {
                   // console.log('Here!');
-                  this.props.sendReply(email.from, `c${window.parent.contratto.CodiceCliente}.p${window.parent.contratto.idcontratto}@s97.srl`, email.subject);
+                  this.props.sendReply(
+                    email.from,
+                    window.parent.contratto.mailbox.address,
+                    email.subject
+                  );
                 }
               }}
               className={`${allStyle.deleteBtn} fa fa-mail-reply`}

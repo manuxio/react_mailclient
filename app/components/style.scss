@@ -40,6 +40,14 @@ $sidebar-width: 0px;
 		box-sizing: border-box;
 	}
 
+  img {
+    clear: none;
+    float: initial;
+    margin: initial;
+    padding: initial;
+    border: initial;
+  }
+
 	margin: 0px auto;
 	overflow: auto;
 	// width: 400px;

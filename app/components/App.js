@@ -94,11 +94,15 @@ export default class App extends React.Component {
       .post(`/newsite/mailer/send.php?idcontratto=${myURL.query.idcontratto || myURL.query.PPID}`)
       .type('form')
       .send({
-        from,
+        from: window.parent.contratto.mailbox.address,
         to,
         subject,
         message,
-        attachments: JSON.stringify(attachments)
+        attachments: JSON.stringify(attachments),
+        mailbox: JSON.stringify(window.parent.contratto.mailbox),
+        debtor: JSON.stringify(window.parent.contratto.debitore),
+        creditor: JSON.stringify(window.parent.contratto.cliente),
+        contratto: JSON.stringify(window.parent.contratto)
       })
       .end((err, res) => {
         if (err) {
