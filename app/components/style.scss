@@ -48,6 +48,16 @@ $sidebar-width: 0px;
     border: initial;
   }
 
+	a img, a:hover img {
+		border: initial;
+	}
+
+	p {
+		margin: initial;
+		line-height: initial;
+		font-size: initial;
+	}
+
 	margin: 0px auto;
 	overflow: auto;
 	// width: 400px;
